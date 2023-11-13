@@ -1,0 +1,16 @@
+<div class="links">
+  <a routerLink="/" class="nav-link logo">
+    <span>Star</span>
+    <span>Wars</span>
+  </a>
+  <ng-container *ngFor="let item of menuItems">
+    <a
+      class="nav-link"
+      routerLinkActive
+      #route="routerLinkActive"
+      routerLink="/{{ item }}"
+    >
+      {{ item | titlecase }}
+    </a>
+  </ng-container>
+</div>

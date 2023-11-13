@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<mat-sidenav-container remix class="side-menu" autosize>
+  <mat-sidenav #sidenav mode="over">
+    <app-side-menu />
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <button mat-icon-button (click)="sidenav.open()">
+      <div class="menu-icon">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </button>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
