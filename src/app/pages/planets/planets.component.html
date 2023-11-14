@@ -1,1 +1,54 @@
-<p>planets works!</p>
+<mat-paginator
+  [hidePageSize]="true"
+  [pageSize]="10"
+  [length]="planetsCount"
+  (page)="handlePageChange($event)"
+>
+</mat-paginator>
+<div>
+  <h1 class="logo">Star Wars Planets</h1>
+  <div class="cards-container">
+    <ng-container *ngIf="planets$ | async as planetsCopy$">
+      <ng-container *ngIf="planetsCopy$.length; else loading">
+        <ng-container *ngFor="let planet of planetsCopy$">
+          <app-card
+            [title]="planet.name"
+            [subtitle]="planet.terrain | titlecase"
+          >
+            <div front>
+              <p>Population: {{ planet.population }}</p>
+              <p>Climate: {{ planet.climate }}</p>
+              <p>Diameter: {{ planet.diameter }}</p>
+            </div>
+            <div back>
+              <p>Orbital period: {{ planet.orbital_period }}</p>
+              <p>Rotational period: {{ planet.rotation_period }}</p>
+              <div>
+                <b>Residents:</b>
+                <ng-container *ngIf="!planet.residents.length">
+                  No residents
+                </ng-container>
+                <ng-container *ngIf="planet.residents.length">
+                  <p *ngFor="let resident of planet.residents">
+                    <ng-container *ngIf="!resident.includes('http')">
+                      {{ resident }}
+                    </ng-container>
+                  </p>
+                  <ng-container *ngIf="planet.residents[0].includes('http')">
+                    loading residents...
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </app-card>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <app-loader></app-loader>
+  </div>
+</ng-template>

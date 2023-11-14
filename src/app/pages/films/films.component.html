@@ -1,1 +1,44 @@
-<p>films works!</p>
+<mat-paginator
+  [hidePageSize]="true"
+  [pageSize]="10"
+  [length]="filmsCount"
+  (page)="handlePageChange($event)"
+>
+</mat-paginator>
+<div>
+  <h1 class="logo">Star Wars Films</h1>
+  <div class="cards-container">
+    <ng-container *ngIf="films$ | async as filmsCopy$">
+      <ng-container *ngIf="filmsCopy$.length; else loading">
+        <ng-container *ngFor="let film of filmsCopy$">
+          <app-card [title]="film.title">
+            <div front>
+              <h2>Director: {{ film.director }}</h2>
+              <h2>Producer: {{ film.producer }}</h2>
+              <br />
+              <p>Release Date: {{ film.release_date }}</p>
+            </div>
+            <div back class="back-content">
+              <button
+                mat-icon-button
+                class="restart-button"
+                (click)="$event.stopPropagation(); crawler.restart()"
+              >
+                <mat-icon>autorenew</mat-icon>
+              </button>
+              <div class="opening_crawl">
+                <app-crawler #crawler>{{ film.opening_crawl }}</app-crawler>
+              </div>
+            </div>
+          </app-card>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <app-loader></app-loader>
+  </div>
+</ng-template>

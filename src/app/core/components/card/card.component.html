@@ -1,0 +1,14 @@
+<div class="tp-wrapper">
+  <div class="tp-box" (click)="getDetails()" [@flipState]="flip">
+    <div class="tp-box__side tp-box__front card">
+      <h1>{{ title }}</h1>
+      <h2>{{ subtitle }}</h2>
+      <div>
+        <ng-content select="[front]"></ng-content>
+      </div>
+    </div>
+    <div class="tp-box__side tp-box__back" card>
+      <ng-content select="[back]"></ng-content>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,74 @@
-<p>species works!</p>
+<mat-paginator
+  [hidePageSize]="true"
+  [pageSize]="10"
+  [length]="speciesCount"
+  (page)="handlePageChange($event)"
+>
+</mat-paginator>
+<div>
+  <h1 class="logo">Star Wars Species</h1>
+  <div class="cards-container">
+    <ng-container *ngIf="species$ | async as speciesCopy$">
+      <ng-container *ngIf="speciesCopy$.length; else loading">
+        <ng-container *ngFor="let specie of speciesCopy$">
+          <app-card
+            [title]="specie.name"
+            [subtitle]="specie.classification + ' | ' + specie.designation"
+          >
+            <div front>
+              <p>Language: {{ specie.language }}</p>
+              <p>Average lifespan: {{ specie.average_lifespan }}</p>
+              <ng-container *ngIf="specie.homeworld?.includes('http')">
+                loading homeworld...
+              </ng-container>
+              <ng-container *ngIf="!specie.homeworld?.includes('http')">
+                Homeworld:
+                {{ specie.homeworld ? specie.homeworld : "Not given" }}
+              </ng-container>
+            </div>
+            <div back>
+              <div>
+                <b>People:</b>
+                <ng-container *ngIf="!specie.people.length">
+                  No people
+                </ng-container>
+                <ng-container *ngIf="specie.people.length">
+                  <p *ngFor="let person of specie.people">
+                    <ng-container *ngIf="!person.includes('http')">
+                      {{ person }}
+                    </ng-container>
+                  </p>
+                  <ng-container *ngIf="specie.people[0].includes('http')">
+                    loading people...
+                  </ng-container>
+                </ng-container>
+              </div>
+              <div>
+                <b>Films:</b>
+                <ng-container *ngIf="!specie.films.length">
+                  No films
+                </ng-container>
+                <ng-container *ngIf="specie.films.length">
+                  <p *ngFor="let film of specie.films">
+                    <ng-container *ngIf="!film.includes('http')">
+                      {{ film }}
+                    </ng-container>
+                  </p>
+                  <ng-container *ngIf="specie.films[0].includes('http')">
+                    loading films...
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </app-card>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <app-loader></app-loader>
+  </div>
+</ng-template>

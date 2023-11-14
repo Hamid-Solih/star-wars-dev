@@ -1,1 +1,76 @@
-<p>people works!</p>
+<mat-paginator
+  [hidePageSize]="true"
+  [pageSize]="10"
+  [length]="peopleCount"
+  (page)="handlePageChange($event)"
+>
+</mat-paginator>
+<div>
+  <h1 class="logo">Star Wars People</h1>
+  <div class="cards-container">
+    <ng-container *ngIf="people$ | async as peopleCopy$">
+      <ng-container *ngIf="peopleCopy$.length; else loading">
+        <ng-container *ngFor="let person of peopleCopy$">
+          <app-card
+            [title]="person.name"
+            [subtitle]="'Gender: ' + person.gender"
+          >
+            <p front>
+              <ng-container *ngIf="person.homeworld.includes('http')">
+                loading homeworld...
+              </ng-container>
+              <ng-container *ngIf="!person.homeworld.includes('http')">
+                Homeworld: {{ person.homeworld }}
+              </ng-container>
+            </p>
+            <div back>
+              <p>Height: {{ person.height }}</p>
+              <p>Mass: {{ person.mass }}</p>
+              <p>Hair Color: {{ person.hair_color }}</p>
+              <p>Skin color: {{ person.skin_color }}</p>
+              <p>Eye color: {{ person.eye_color }}</p>
+              <div>
+                <b>Films:</b>
+                <ng-container *ngIf="!person.films.length">
+                  No films
+                </ng-container>
+                <ng-container *ngIf="person.films.length">
+                  <p *ngFor="let film of person.films">
+                    <ng-container *ngIf="!film.includes('http')">
+                      {{ film }}
+                    </ng-container>
+                  </p>
+                  <ng-container *ngIf="person.films[0].includes('http')">
+                    loading films...
+                  </ng-container>
+                </ng-container>
+              </div>
+              <div>
+                <b>Species:</b>
+                <ng-container *ngIf="!person.species.length">
+                  Not given
+                </ng-container>
+                <ng-container *ngIf="person.species.length">
+                  <p *ngFor="let specie of person.species">
+                    <ng-container *ngIf="!specie.includes('http')">
+                      {{ specie }}
+                    </ng-container>
+                  </p>
+                  <ng-container *ngIf="person.species[0].includes('http')">
+                    loading species...
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </app-card>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <app-loader></app-loader>
+  </div>
+</ng-template>

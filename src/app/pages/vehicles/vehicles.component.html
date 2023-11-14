@@ -1,1 +1,69 @@
-<p>vehicles works!</p>
+<mat-paginator
+  [hidePageSize]="true"
+  [pageSize]="10"
+  [length]="vehiclesCount"
+  (page)="handlePageChange($event)"
+>
+</mat-paginator>
+<div>
+  <h1 class="logo">Star Wars Vehicles</h1>
+  <div class="cards-container">
+    <ng-container *ngIf="vehicles$ | async as vehiclesCopy$">
+      <ng-container *ngIf="vehiclesCopy$.length; else loading">
+        <ng-container *ngFor="let vehicle of vehiclesCopy$">
+          <app-card
+            [title]="vehicle.name"
+            [subtitle]="'Model: ' + vehicle.model"
+          >
+            <div front>
+              <p>Manufacturer: {{ vehicle.manufacturer }}</p>
+              <p>Crew: {{ vehicle.crew }}</p>
+              <p>Passengers: {{ vehicle.passengers }}</p>
+              <p>Vehicle class: {{ vehicle.vehicle_class }}</p>
+            </div>
+            <div back>
+              <div>
+                <b>Pilots:</b>
+                <ng-container *ngIf="!vehicle.pilots.length">
+                  No pilots
+                </ng-container>
+                <ng-container *ngIf="vehicle.pilots.length">
+                  <p *ngFor="let person of vehicle.pilots">
+                    <ng-container *ngIf="!person.includes('http')">
+                      {{ person }}
+                    </ng-container>
+                  </p>
+                  <ng-container *ngIf="vehicle.pilots[0].includes('http')">
+                    loading pilots...
+                  </ng-container>
+                </ng-container>
+              </div>
+              <div>
+                <b>Films:</b>
+                <ng-container *ngIf="!vehicle.films.length">
+                  No films
+                </ng-container>
+                <ng-container *ngIf="vehicle.films.length">
+                  <p *ngFor="let film of vehicle.films">
+                    <ng-container *ngIf="!film.includes('http')">
+                      {{ film }}
+                    </ng-container>
+                  </p>
+                  <ng-container *ngIf="vehicle.films[0].includes('http')">
+                    loading films...
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </app-card>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <app-loader></app-loader>
+  </div>
+</ng-template>
