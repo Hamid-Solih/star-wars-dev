@@ -33,14 +33,13 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 export class CardComponent implements OnInit {
   @Input() title: string = '';
   @Input() subtitle: string = '';
-  @Output() flipped = new EventEmitter();
+  @Output() openDialog = new EventEmitter();
 
   ngOnInit() {}
 
   flip: string = 'inactive';
 
   getDetails() {
-    this.flipped.emit();
     this.flip = this.flip == 'inactive' ? 'active' : 'inactive';
   }
 }

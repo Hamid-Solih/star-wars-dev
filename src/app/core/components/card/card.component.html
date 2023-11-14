@@ -8,6 +8,13 @@
       </div>
     </div>
     <div class="tp-box__side tp-box__back" card>
+      <button
+        mat-icon-button
+        class="open-in-new"
+        (click)="openDialog.emit(); $event.stopPropagation()"
+      >
+        <mat-icon>open_in_new</mat-icon>
+      </button>
       <ng-content select="[back]"></ng-content>
     </div>
   </div>

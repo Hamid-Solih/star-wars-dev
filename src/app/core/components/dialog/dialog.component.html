@@ -1,0 +1,55 @@
+<div class="container">
+  <mat-dialog-actions align="end">
+    <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+  </mat-dialog-actions>
+  <h2 mat-dialog-title class="logo">{{ title }}</h2>
+
+  <div *ngIf="error">Ooops. There was an error fetching the data :(</div>
+  <mat-dialog-content class="mat-typography" *ngIf="!error">
+    <div *ngIf="loadingState">
+      <div class="loading">
+        <app-loader></app-loader>
+      </div>
+    </div>
+    <ng-container *ngFor="let field of data$ | async | keyvalue">
+      <div *ngIf="!loadingState">
+        <div *ngIf="isArray(field.value)" class="array-fields">
+          <p>
+            <b>{{ $any(field.key) | titlecase }}: </b>
+          </p>
+          <ng-container *ngFor="let arrayItem of $any(field.value)">
+            <div *ngIf="!arrayItem.url">
+              <p>{{ arrayItem }}</p>
+            </div>
+            <div *ngIf="arrayItem.url">
+              <a (click)="redirect(arrayItem.url)">{{ arrayItem.name }}</a>
+            </div>
+          </ng-container>
+        </div>
+        <div
+          *ngIf="
+            !isArray(field.value) &&
+            field.key != 'name' &&
+            field.key != 'title' &&
+            field.key != 'url' &&
+            field.key != 'created' &&
+            field.key != 'edited'
+          "
+        >
+          <ng-container *ngIf="!$any(field.value).url">
+            <p>
+              <b>{{ $any(field.key) | titlecase | removeUnderscore }}: </b
+              >{{ field.value }}
+            </p>
+          </ng-container>
+          <ng-container *ngIf="$any(field.value).url">
+            <b>{{ $any(field.key) | titlecase | removeUnderscore }}: </b>
+            <a (click)="redirect($any(field.value).url)">
+              {{ $any(field.value).name }}</a
+            >
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </mat-dialog-content>
+</div>

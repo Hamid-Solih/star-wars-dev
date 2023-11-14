@@ -14,6 +14,7 @@
           <app-card
             [title]="starship.name"
             [subtitle]="'Model: ' + starship.model"
+            (openDialog)="openDialog(starship.url)"
           >
             <div front>
               <p>Manufacturer: {{ starship.manufacturer }}</p>

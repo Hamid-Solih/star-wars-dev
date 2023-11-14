@@ -10,6 +10,9 @@ import { RouterModule } from '@angular/router';
 import { CardComponent } from './components/card/card.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { CrawlerComponent } from './components/crawler/crawler.component';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { RemoveUnderscorePipe } from './pipes/remove-underscore.pipe';
 
 @NgModule({
   declarations: [
@@ -17,12 +20,14 @@ import { CrawlerComponent } from './components/crawler/crawler.component';
     CardComponent,
     LoaderComponent,
     CrawlerComponent,
+    DialogComponent,
   ],
   exports: [
     SideMenuComponent,
     CardComponent,
     LoaderComponent,
     CrawlerComponent,
+    DialogComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +36,9 @@ import { CrawlerComponent } from './components/crawler/crawler.component';
     MatCardModule,
     MatButtonModule,
     MatSidenavModule,
+    MatDialogModule,
     RouterModule,
+    RemoveUnderscorePipe
   ],
 })
 export class CoreModule {}

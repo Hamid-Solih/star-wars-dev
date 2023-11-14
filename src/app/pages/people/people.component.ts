@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, map, startWith, take, tap } from 'rxjs';
-import { PaginatedResult } from 'src/app/core/interfaces/paginated-result';
 import { Person } from 'src/app/core/interfaces/person';
+import { openDialogAction } from 'src/app/core/store/dialog.actions';
 import { CoreDataService } from 'src/app/core/utils/data.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class PeopleComponent {
   people$?: Observable<Person[]>;
   peopleCount: number = 0;
 
-  constructor(public ds: CoreDataService) {
+  constructor(public ds: CoreDataService, private store: Store<{ url: string }>) {
     this.updatePage();
   }
 
@@ -31,7 +31,7 @@ export class PeopleComponent {
           let newPerson: any = {};
           Object.assign(newPerson, person);
           Object.entries(person).forEach(([key, value]) => {
-            if (value.includes('http')) {
+            if (value.includes('http') && key !== 'url') {
               if (!this.requestCache$.has(value.toString())) {
                 this.requestCache$.set(value.toString(), this.ds.get(value));
               }
@@ -68,5 +68,9 @@ export class PeopleComponent {
 
   handlePageChange(event: any) {
     this.updatePage(event.pageIndex + 1);
+  }
+
+  openDialog(url: string) {
+    this.store.dispatch(openDialogAction({ url }));
   }
 }

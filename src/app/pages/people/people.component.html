@@ -14,6 +14,7 @@
           <app-card
             [title]="person.name"
             [subtitle]="'Gender: ' + person.gender"
+            (openDialog)="openDialog(person.url)"
           >
             <p front>
               <ng-container *ngIf="person.homeworld.includes('http')">

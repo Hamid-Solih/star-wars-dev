@@ -11,7 +11,7 @@
     <ng-container *ngIf="films$ | async as filmsCopy$">
       <ng-container *ngIf="filmsCopy$.length; else loading">
         <ng-container *ngFor="let film of filmsCopy$">
-          <app-card [title]="film.title">
+          <app-card [title]="film.title" (openDialog)="openDialog(film.url)">
             <div front>
               <h2>Director: {{ film.director }}</h2>
               <h2>Producer: {{ film.producer }}</h2>

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Observable, tap, map, take, startWith } from 'rxjs';
 import { Vehicle } from 'src/app/core/interfaces/vehicle';
 import { CoreDataService } from 'src/app/core/utils/data.service';
+import { Store } from '@ngrx/store';
+import { openDialogAction } from 'src/app/core/store/dialog.actions';
 
 @Component({
   selector: 'app-vehicles',
@@ -13,7 +15,10 @@ export class VehiclesComponent {
   vehicles$?: Observable<Vehicle[]>;
   vehiclesCount: number = 0;
 
-  constructor(public ds: CoreDataService) {
+  constructor(
+    public ds: CoreDataService,
+    private store: Store<{ url: string }>
+  ) {
     this.updatePage();
   }
 
@@ -66,5 +71,9 @@ export class VehiclesComponent {
 
   handlePageChange(event: any) {
     this.updatePage(event.pageIndex + 1);
+  }
+
+  openDialog(url: string) {
+    this.store.dispatch(openDialogAction({ url }));
   }
 }

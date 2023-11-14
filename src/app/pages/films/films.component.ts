@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Observable, tap, map, take, startWith } from 'rxjs';
 import { Film } from 'src/app/core/interfaces/film';
 import { CoreDataService } from 'src/app/core/utils/data.service';
+import { Store } from '@ngrx/store';
+import { openDialogAction } from 'src/app/core/store/dialog.actions';
 
 @Component({
   selector: 'app-films',
@@ -13,7 +15,10 @@ export class FilmsComponent {
   films$?: Observable<Film[]>;
   filmsCount: number = 0;
 
-  constructor(public ds: CoreDataService) {
+  constructor(
+    public ds: CoreDataService,
+    private store: Store<{ url: string }>
+  ) {
     this.updatePage();
   }
 
@@ -30,7 +35,7 @@ export class FilmsComponent {
           let newFilm: any = {};
           Object.assign(newFilm, film);
           Object.entries(film).forEach(([key, value]) => {
-            if (typeof value === 'string' && value.includes('http')) {
+            if (typeof value === 'string' && value.includes('http') && key !== 'url') {
               if (!this.requestCache$.has(value.toString())) {
                 this.requestCache$.set(value.toString(), this.ds.get(value));
               }
@@ -69,7 +74,7 @@ export class FilmsComponent {
     this.updatePage(event.pageIndex + 1);
   }
 
-  callee(){
-    console.log("callee");
+  openDialog(url: string) {
+    this.store.dispatch(openDialogAction({ url }));
   }
 }

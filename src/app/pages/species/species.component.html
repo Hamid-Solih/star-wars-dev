@@ -14,6 +14,7 @@
           <app-card
             [title]="specie.name"
             [subtitle]="specie.classification + ' | ' + specie.designation"
+            (openDialog)="openDialog(specie.url)"
           >
             <div front>
               <p>Language: {{ specie.language }}</p>
