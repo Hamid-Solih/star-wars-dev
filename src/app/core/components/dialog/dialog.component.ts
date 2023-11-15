@@ -51,21 +51,20 @@ export class DialogComponent {
                 };
               });
           } else if (value instanceof Array) {
-            let newItem: any = [];
+            let newItem: any = value.map((url:string)=>'loading...')
             value.forEach((url) => {
               if (!this.requestCache$.has(url.toString())) {
                 this.requestCache$.set(url.toString(), ds.get(url));
-                item[key] = 'loading...';
               }
 
               this.requestCache$
                 .get(url.toString())
                 ?.pipe(take(1))
                 .subscribe((data: any) => {
-                  newItem.push({
+                  newItem[value.indexOf(url)] = {
                     name: Object.values(data)[0],
                     url: url,
-                  });
+                  };
                 });
             });
             item[key] = newItem;

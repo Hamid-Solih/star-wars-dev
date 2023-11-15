@@ -35,7 +35,11 @@ export class FilmsComponent {
           let newFilm: any = {};
           Object.assign(newFilm, film);
           Object.entries(film).forEach(([key, value]) => {
-            if (typeof value === 'string' && value.includes('http') && key !== 'url') {
+            if (
+              typeof value === 'string' &&
+              value.includes('http') &&
+              key !== 'url'
+            ) {
               if (!this.requestCache$.has(value.toString())) {
                 this.requestCache$.set(value.toString(), this.ds.get(value));
               }
@@ -46,7 +50,7 @@ export class FilmsComponent {
                   newFilm[key] = Object.values(data)[0];
                 });
             } else if (value instanceof Array) {
-              let newItem: any = [];
+              let newItem: any = value.map((url: string) => 'loading...');
               value.forEach((url) => {
                 if (!this.requestCache$.has(url.toString())) {
                   this.requestCache$.set(url.toString(), this.ds.get(url));
@@ -55,8 +59,8 @@ export class FilmsComponent {
                 this.requestCache$
                   .get(url.toString())
                   ?.pipe(take(1))
-                  .subscribe((data) => {
-                    newItem.push(Object.values(data)[0]);
+                  .subscribe((data: any) => {
+                    newItem[value.indexOf(url)] = Object.values(data)[0];
                   });
               });
               newFilm[key] = newItem;

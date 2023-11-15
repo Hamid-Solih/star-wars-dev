@@ -15,7 +15,10 @@ export class PeopleComponent {
   people$?: Observable<Person[]>;
   peopleCount: number = 0;
 
-  constructor(public ds: CoreDataService, private store: Store<{ url: string }>) {
+  constructor(
+    public ds: CoreDataService,
+    private store: Store<{ url: string }>
+  ) {
     this.updatePage();
   }
 
@@ -42,7 +45,7 @@ export class PeopleComponent {
                   newPerson[key] = Object.values(data)[0];
                 });
             } else if (value instanceof Array) {
-              let newItem: any = [];
+              let newItem: any = value.map((url: string) => 'loading...');
               value.forEach((url) => {
                 if (!this.requestCache$.has(url.toString())) {
                   this.requestCache$.set(url.toString(), this.ds.get(url));
@@ -51,8 +54,8 @@ export class PeopleComponent {
                 this.requestCache$
                   .get(url.toString())
                   ?.pipe(take(1))
-                  .subscribe((data) => {
-                    newItem.push(Object.values(data)[0]);
+                  .subscribe((data: any) => {
+                    newItem[value.indexOf(url)] = Object.values(data)[0];
                   });
               });
               newPerson[key] = newItem;

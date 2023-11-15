@@ -15,7 +15,10 @@ export class SpeciesComponent {
   species$?: Observable<Specie[]>;
   speciesCount: number = 0;
 
-  constructor(public ds: CoreDataService, private store: Store<{ url: string }>) {
+  constructor(
+    public ds: CoreDataService,
+    private store: Store<{ url: string }>
+  ) {
     this.updatePage();
   }
 
@@ -31,7 +34,7 @@ export class SpeciesComponent {
           let newSpecie: any = {};
           Object.assign(newSpecie, specie);
           Object.entries(specie).forEach(([key, value]) => {
-            if (value && value.includes('http')) {
+            if (value && value.includes('http') && key !== 'url') {
               if (!this.requestCache$.has(value.toString())) {
                 this.requestCache$.set(value.toString(), this.ds.get(value));
               }
@@ -42,7 +45,7 @@ export class SpeciesComponent {
                   newSpecie[key] = Object.values(data)[0];
                 });
             } else if (value instanceof Array) {
-              let newItem: any = [];
+              let newItem: any = value.map((url: string) => 'loading...');
               value.forEach((url) => {
                 if (!this.requestCache$.has(url.toString())) {
                   this.requestCache$.set(url.toString(), this.ds.get(url));
@@ -51,8 +54,8 @@ export class SpeciesComponent {
                 this.requestCache$
                   .get(url.toString())
                   ?.pipe(take(1))
-                  .subscribe((data) => {
-                    newItem.push(Object.values(data)[0]);
+                  .subscribe((data: any) => {
+                    newItem[value.indexOf(url)] = Object.values(data)[0];
                   });
               });
               newSpecie[key] = newItem;
