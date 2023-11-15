@@ -26,7 +26,6 @@ export class FilmsComponent {
     this.films$ = this.ds.getFilms({ page }).pipe(
       tap((paginatedResult) => {
         this.filmsCount = paginatedResult.count;
-        console.log(paginatedResult);
       }),
       map((paginatedResult) => paginatedResult.results),
       map((films) => {
